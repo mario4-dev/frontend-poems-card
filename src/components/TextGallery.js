@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './TextGallery.css';
 
 const TextGallery = () => {
@@ -7,20 +8,15 @@ const TextGallery = () => {
   const [error, setError] = useState(null);
   
   // URL del backend Laravel
-  const API_URL = 'http://localhost:8000/api/poems';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/poems';
   
   // Función para obtener los poemas desde la API
   const fetchPoems = async () => {
     try {
       setLoading(true);
-      const response = await fetch(API_URL);
+      const response = await axios.get(API_URL);
       
-      if (!response.ok) {
-        throw new Error('Error al cargar los poemas');
-      }
-      
-      const data = await response.json();
-      setTexts(data);
+      setTexts(response.data);
     } catch (err) {
       console.error('Error:', err);
       setError(err.message);
