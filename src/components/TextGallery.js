@@ -7,34 +7,54 @@ const TextGallery = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // URL del backend Laravel
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api/poems';
+  // URL del backend Laravel (ruta pública)
+  const API_URL = process.env.REACT_APP_API_URL + '/poems/public' || 'http://localhost:8000/api/poems/public';
   
   // Función para obtener los poemas desde la API
   const fetchPoems = async () => {
     try {
       setLoading(true);
+      setError(null);
+      
+      console.log('Fetching poems from:', API_URL);
+
       const response = await axios.get(API_URL);
       
-      setTexts(response.data);
+      console.log('Response received:', response.data);
+      
+      // La API ahora devuelve directamente un array de poemas
+      if (Array.isArray(response.data)) {
+        setTexts(response.data);
+      } else {
+        // Fallback por si la estructura cambia
+        setTexts(response.data.data || response.data);
+      }
     } catch (err) {
-      console.error('Error:', err);
-      setError(err.message);
+      console.error('Error fetching poems:', err);
+      setError(`Error al cargar poemas: ${err.response?.data?.message || err.message}`);
+      
       // Cargar datos de ejemplo si hay un error
       setTexts([
         {
           id: 1,
           title: "Siempre tú",
-          content: "Siempre fuiste el sonido de las olas que calma mi corazon cuando los vientos de la vida golpean fuerte.",
+          content: "Siempre fuiste el sonido de las olas que calma mi corazón cuando los vientos de la vida golpean fuerte.\n\nEn cada amanecer, en cada atardecer,\ntu recuerdo me acompaña como una melodía eterna.",
           author: "RapsodAz",
-          color: 'purple'
+          color: '#8B5CF6'
         },
         {
           id: 2,
           title: "Odisea",
-          content: "No se como llegamos al punto donde necesite de ti para poder sonreir, donde todo lo que pasamos no fue mas que un efimero adios que nunca supimos pronunciar.",
+          content: "No sé cómo llegamos al punto donde necesito de ti para poder sonreír, donde todo lo que pasamos no fue más que un efímero adiós que nunca supimos pronunciar.\n\nLa distancia se convierte en un océano\nque separa dos almas que se buscan.",
           author: "RapsodAz",
-          color: '#bd92fc'
+          color: '#BD92FC'
+        },
+        {
+          id: 3,
+          title: "Reflexiones Nocturnas",
+          content: "En la quietud de la noche, cuando el mundo duerme,\nlas palabras cobran vida en mi mente.\n\nCada verso es un suspiro,\ncada estrofa un latido del corazón.",
+          author: "RapsodAz",
+          color: '#5E5E97'
         }
       ]);
     } finally {
@@ -49,8 +69,19 @@ const TextGallery = () => {
 
   return (
     <div className="text-gallery">
-      <h1>Bienvenidos</h1> 
-      <h1>Mis pobres versos y yo(rapsodaz)</h1>
+      <header className="gallery-header">
+        <h1>Bienvenidos</h1> 
+        <h2>Mis pobres versos y yo (RapsodAz)</h2>
+        <div className="connection-status">
+          {loading ? (
+            <span className="status loading">🔄 Cargando poemas...</span>
+          ) : error ? (
+            <span className="status error">⚠️ Modo offline - Mostrando poemas de ejemplo</span>
+          ) : (
+            <span className="status success">✅ Conectado - {texts.length} poemas cargados</span>
+          )}
+        </div>
+      </header>
       
       {loading ? (
         <div className="loading">
@@ -66,10 +97,16 @@ const TextGallery = () => {
           {texts.map((text) => (
             <div key={text.id} className="text-card" style={{ backgroundColor: text.color }}>
               <h2>{text.title}</h2>
-              <p>{text.content}</p>
-              <p className='text-author'>{text.author}</p>
+              <div className="poem-content">
+                {text.content.split('\n').map((line, index) => (
+                  <p key={index} className={line.trim() === '' ? 'poem-line-break' : 'poem-line'}>
+                    {line}
+                  </p>
+                ))}
+              </div>
+              <p className='text-author'>— {text.author}</p>
               <button onClick={() => {
-                const colors = ['purple', '#bd92fc', '#5e5e97', '#17ad92'];
+                const colors = ['#8B5CF6', '#BD92FC', '#5E5E97', '#17AD92', '#F59E0B', '#EF4444'];
                 const currentIndex = colors.indexOf(text.color);
                 const nextColor = colors[(currentIndex + 1) % colors.length];
                 setTexts(prevTexts => 
@@ -77,7 +114,7 @@ const TextGallery = () => {
                     t.id === text.id ? { ...t, color: nextColor } : t
                   )
                 );
-              }}>Cambiar Color</button>
+              }}>🎨 Cambiar Color</button>
             </div>
           ))}
         </div>

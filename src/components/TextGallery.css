@@ -1,7 +1,67 @@
+/* Definir la fuente personalizada */
+@font-face {
+  font-family: 'Momt';
+  src: url('../assets/fonts/Mom«t___.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .text-gallery {
   padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+  
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1f1c1c 0%, #1f1e1f 100%);
+}
+
+.gallery-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: white;
+}
+
+.gallery-header h1 {
+  font-family: 'Momt', cursive, sans-serif;
+  font-size: 5rem;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+}
+
+.gallery-header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+  font-weight: 300;
+}
+
+.connection-status {
+  margin-top: 1rem;
+}
+
+.status {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.status.loading {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.status.error {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #FCA5A5;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.status.success {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #86EFAC;
+  border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 .text-container {
@@ -42,34 +102,38 @@
   background-color: #0e4a5e;
 }
 
-.text-card p {
-  color: #faf4f4;
-  line-height: 1.6;
-}
-
-.text-author {
-  color: #999;
-  font-size: 0.9rem;
-}
-
-.text-card:hover {
-  transform: translateY(-5px);
-}
-
 .text-card h2 {
   color: #f7f1f1;
   margin-bottom: 1rem;
   font-size: 1.5rem;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.text-card p {
+.poem-content {
+  margin: 1.5rem 0;
+}
+
+.poem-line {
   color: #faf4f4;
-  line-height: 1.6;
+  line-height: 1.8;
+  margin: 0.5rem 0;
+  font-style: italic;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.poem-line-break {
+  height: 1rem;
+  margin: 0;
 }
 
 .text-author {
-  color: #999;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  text-align: right;
+  font-style: italic;
 }
 
 /* Estilos para estados de carga y error */
